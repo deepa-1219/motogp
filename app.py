@@ -13,11 +13,28 @@ Analyze **MotoGP riders' wins** across clockwise and anticlockwise circuits.
 
 # Load data
 @st.cache_data
+@st.cache_data
 def load_data():
-    df_circuits = pd.read_csv('/kaggle/input/motogp-circuits/circuit_data.csv', usecols=['Name', 'Right Corners','Left Corners'])
-    df_races = pd.read_csv('/kaggle/input/moto-gp-world-championship19492022/grand-prix-race-winners.csv')
-    df_seasons = pd.read_csv('/kaggle/input/motogp-riders-active-years-per-category/active_years_per_category.csv')
+    import os
+    import pandas as pd
+
+    # Load circuits with corner info
+    df_circuits = pd.read_csv('data/circuit_data.csv', usecols=['Name', 'Right Corners','Left Corners'])
+
+    # Load original races
+    df_races_original = pd.read_csv('data/grand-prix-race-winners.csv')
+
+    # Load mock 2024–2025 races
+    df_races_2024_2025 = pd.read_csv('data/motogp-mock-wins-2024-2025.csv')
+
+    # Combine race data
+    df_races = pd.concat([df_races_original, df_races_2024_2025], ignore_index=True)
+
+    # Load rider season info
+    df_seasons = pd.read_csv('data/active_years_per_category.csv')
+
     return df_circuits, df_races, df_seasons
+
 
 df_circuits, df_races, df_active_seasons = load_data()
 
