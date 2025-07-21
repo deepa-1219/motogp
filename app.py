@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
+import io
 
 # Page settings
 st.set_page_config(page_title="MotoGP Rider Analysis", layout="wide")
@@ -74,9 +75,13 @@ if st.checkbox("📄 Show Raw Filtered Data Table"):
     st.write(filtered_df.sort_values(by=["Rider", "Season"]))
 
 # Optional: Download CSV
+
+csv_buffer = io.StringIO()
+filtered_df.to_csv(csv_buffer, index=False)
 st.download_button(
     label="💾 Download Filtered Data as CSV",
-    data=filtered_df.to_csv(index=False),
+    data=csv_buffer.getvalue(),
     file_name='filtered_motogp_data.csv',
     mime='text/csv'
 )
+
